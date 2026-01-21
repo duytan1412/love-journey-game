@@ -374,9 +374,9 @@ class BoardRenderer {
         const rawLength = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
 
         // Make segments smaller to prevent overlap
-        const lengthFactor = nextIsIntersection ? 0.35 : 0.50;
-        const segmentLength = Math.max(rawLength * lengthFactor, 35);
-        const segmentHeight = 40; // Compact height to prevent overlap
+        const lengthFactor = nextIsIntersection ? 0.30 : 0.40;
+        const segmentLength = Math.max(rawLength * lengthFactor, 30);
+        const segmentHeight = 35; // Compact height to prevent overlap
 
         // Create segment rectangle
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');

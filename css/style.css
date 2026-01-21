@@ -802,6 +802,8 @@ body {
     color: var(--cyan);
     backdrop-filter: blur(5px);
     animation: pulseLabel 2s ease-in-out infinite;
+    transform: translateX(-50%);
+    /* Center horizontally under intersection */
 }
 
 @keyframes pulseLabel {
