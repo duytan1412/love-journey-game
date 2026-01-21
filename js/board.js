@@ -79,16 +79,21 @@ class BoardRenderer {
             // Manual adjustments for tiles near curved sections
             // These areas have shorter physical distances, so we spread tiles apart
 
+            // Near first curve (tiles 3, 4)
+            if (i === 3) pos -= 0.025; // Push tile 3 left
+            if (i === 4) pos -= 0.01;  // Push tile 4 left
+
             // Near intersection 7 (tiles 5, 6)
             if (i === 5) pos -= 0.045;  // Push tile 5 far left
             if (i === 6) pos -= 0.025;  // Push tile 6 left
             if (i === 8) pos += 0.02;   // Push tile 8 right
 
-            // Near intersection 15 (tiles 13, 14, 16, 17)
+            // Near intersection 15 (tiles 13, 14, 17, 18, 19)
             if (i === 13) pos -= 0.01; // Push tile 13 left
             if (i === 14) pos -= 0.005; // Push tile 14 left
-            if (i === 16) pos += 0.005; // Push tile 16 right
             if (i === 17) pos += 0.01;  // Push tile 17 right
+            if (i === 18) pos += 0.025; // Push tile 18 right
+            if (i === 19) pos += 0.04;  // Push tile 19 right
 
             // Near intersection 22 (tiles 20, 21, 23, 24)
             if (i === 20) pos -= 0.05;  // Push tile 20 further left
@@ -409,7 +414,7 @@ class BoardRenderer {
 
         // Ensure tile is never larger than the space available minus a protective gap
         // Using 12px gap to ensure visible separation
-        const maxAllowed = Math.max(rawLength - 12, 20);
+        const maxAllowed = Math.max(rawLength - 12, 15); // Floor reduced to 15px
         const segmentLength = Math.min(STANDARD_TILE_SIZE, maxAllowed);
 
         const segmentHeight = 38; // Compact height to prevent overlap
