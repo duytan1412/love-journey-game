@@ -91,10 +91,10 @@ class BoardRenderer {
             if (i === 17) pos += 0.01;  // Push tile 17 right
 
             // Near intersection 22 (tiles 20, 21, 23, 24)
-            if (i === 20) pos -= 0.045; // Push tile 20 far left
-            if (i === 21) pos -= 0.025; // Push tile 21 left  
-            if (i === 23) pos += 0.025; // Push tile 23 right
-            if (i === 24) pos += 0.045; // Push tile 24 far right
+            if (i === 20) pos -= 0.05;  // Push tile 20 further left
+            if (i === 21) pos -= 0.03;  // Push tile 21 left  
+            if (i === 23) pos += 0.03;  // Push tile 23 right
+            if (i === 24) pos += 0.05;  // Push tile 24 further right
 
             this.tilePositions.push(pos);
         }
@@ -405,10 +405,10 @@ class BoardRenderer {
         const rawLength = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
 
         // Use FIXED tile size for consistent appearance, BUT cap it to prevent overlap
-        const STANDARD_TILE_SIZE = 48; // Reduced to 48px for better spacing
+        const STANDARD_TILE_SIZE = 56; // Reduced from 65 to prevent sticking
 
         // Ensure tile is never larger than the space available minus a gap
-        const maxAllowed = Math.max(rawLength - 8, 30);
+        const maxAllowed = Math.max(rawLength - 4, 30);
         const segmentLength = Math.min(STANDARD_TILE_SIZE, maxAllowed);
 
         const segmentHeight = 38; // Compact height to prevent overlap
