@@ -405,10 +405,11 @@ class BoardRenderer {
         const rawLength = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
 
         // Use FIXED tile size for consistent appearance, BUT cap it to prevent overlap
-        const STANDARD_TILE_SIZE = 56; // Reduced from 65 to prevent sticking
+        const STANDARD_TILE_SIZE = 48; // Reduced from 56 to create more spacing
 
-        // Ensure tile is never larger than the space available minus a gap
-        const maxAllowed = Math.max(rawLength - 4, 30);
+        // Ensure tile is never larger than the space available minus a protective gap
+        // Using 12px gap to ensure visible separation
+        const maxAllowed = Math.max(rawLength - 12, 20);
         const segmentLength = Math.min(STANDARD_TILE_SIZE, maxAllowed);
 
         const segmentHeight = 38; // Compact height to prevent overlap
