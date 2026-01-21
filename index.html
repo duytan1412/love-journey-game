@@ -94,23 +94,6 @@
                 </div>
             </div>
 
-            <!-- App Download Links -->
-            <div class="app-download-section">
-                <p class="download-title">📲 Tải App để chơi mọi lúc:</p>
-                <div class="download-buttons">
-                    <a href="https://apps.apple.com/app/love-journey-game" target="_blank" class="download-btn ios-btn"
-                        id="ios-download">
-                        <span class="btn-icon">🍎</span>
-                        <span class="btn-text">App Store</span>
-                    </a>
-                    <a href="https://play.google.com/store/apps/details?id=com.lovejourney.game" target="_blank"
-                        class="download-btn android-btn" id="android-download">
-                        <span class="btn-icon">🤖</span>
-                        <span class="btn-text">Google Play</span>
-                    </a>
-                </div>
-                <p class="pwa-note">💡 Hoặc: <strong>Thêm vào Màn hình chính</strong> từ trình duyệt!</p>
-            </div>
         </div>
     </div>
 
@@ -118,6 +101,11 @@
     <div id="game-screen" class="screen">
         <!-- Player Status Bar -->
         <div class="status-bar">
+            <!-- Menu Button - Left Corner -->
+            <button id="back-to-menu-btn" class="btn-back" title="Quay về menu">
+                ⬅️ Menu
+            </button>
+
             <div class="player-card p1-card">
                 <div class="player-avatar-wrapper">
                     <span class="player-avatar">💙</span>
@@ -150,11 +138,6 @@
                     </span>
                 </div>
             </div>
-
-            <!-- Back Button -->
-            <button id="back-to-menu-btn" class="btn-back" title="Quay về menu">
-                ⬅️ Menu
-            </button>
         </div>
 
         <!-- Game Board Canvas - EXPANDED -->
