@@ -70,8 +70,32 @@ class BoardRenderer {
      * Calculate positions along the path for each tile
      */
     calculateTilePositions() {
+        // Clear existing positions
+        this.tilePositions = [];
+
         for (let i = 0; i < this.tilesPerLane; i++) {
-            this.tilePositions.push(i / (this.tilesPerLane - 1));
+            let pos = i / (this.tilesPerLane - 1);
+
+            // Manual adjustments for tiles near curved sections
+            // These areas have shorter physical distances, so we spread tiles apart
+
+            // Near intersection 7 (tiles 5, 6)
+            if (i === 5) pos -= 0.02;  // Push tile 5 left
+            if (i === 6) pos -= 0.01;  // Push tile 6 slightly left
+
+            // Near intersection 15 (tiles 13, 14, 16, 17)
+            if (i === 13) pos -= 0.01; // Push tile 13 left
+            if (i === 14) pos -= 0.005; // Push tile 14 left
+            if (i === 16) pos += 0.005; // Push tile 16 right
+            if (i === 17) pos += 0.01;  // Push tile 17 right
+
+            // Near intersection 22 (tiles 20, 21, 23, 24)
+            if (i === 20) pos -= 0.02; // Push tile 20 left
+            if (i === 21) pos -= 0.01; // Push tile 21 left  
+            if (i === 23) pos += 0.01; // Push tile 23 right
+            if (i === 24) pos += 0.02; // Push tile 24 right
+
+            this.tilePositions.push(pos);
         }
     }
 
