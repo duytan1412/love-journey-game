@@ -172,7 +172,7 @@ class BoardRenderer {
 
         // Track lane paths for correct positioning
         const laneWidth = 45; // Half-width of lane track stroke (wider now)
-        const GAP = 150; // Very large gap from intersection tiles to prevent overlap
+        const GAP = 40; // Small gap from intersection tiles to prevent overlap
 
         const getTilePos = (path, index) => {
             if (this.INTERSECTIONS[index]) return this.INTERSECTIONS[index];
@@ -374,9 +374,9 @@ class BoardRenderer {
         const rawLength = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
 
         // Make segments smaller to prevent overlap
-        const lengthFactor = nextIsIntersection ? 0.30 : 0.40;
-        const segmentLength = Math.max(rawLength * lengthFactor, 30);
-        const segmentHeight = 35; // Compact height to prevent overlap
+        const lengthFactor = nextIsIntersection ? 0.45 : 0.55;
+        const segmentLength = Math.max(rawLength * lengthFactor, 40);
+        const segmentHeight = 38; // Compact height to prevent overlap
 
         // Create segment rectangle
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
