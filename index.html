@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Love Journey">
+    <meta name="theme-color" content="#0a0a1a">
+    <title>💕 Love Journey - Hành Trình Tình Yêu</title>
+    <meta name="description" content="Trò chơi bàn cờ tình yêu - Hai người lang thang rồi lại gặp nhau">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+
+    <!-- iOS Splash Screens for iPhone 11 (828x1792) -->
+    <link rel="apple-touch-startup-image" href="icons/splash-828x1792.png"
+        media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Offline indicator -->
+    <div id="offline-indicator" class="offline-indicator hidden">📵 Đang offline</div>
+
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="screen active">
+        <div class="setup-container">
+            <h1 class="game-title">💕 Love Journey 💕</h1>
+            <p class="subtitle">Hai người lang thang giữa dòng đời... rồi lại gặp nhau</p>
+
+            <div class="player-inputs">
+                <div class="player-input p1-input">
+                    <label for="player1-name">💙 Người ấy</label>
+                    <input type="text" id="player1-name" placeholder="Nhập tên..." maxlength="10">
+                </div>
+                <div class="heart-divider">💗</div>
+                <div class="player-input p2-input">
+                    <label for="player2-name">💗 Người này</label>
+                    <input type="text" id="player2-name" placeholder="Nhập tên..." maxlength="10">
+                </div>
+            </div>
+
+            <button id="start-game-btn" class="btn-primary">
+                <span>Bắt Đầu Hành Trình</span>
+                <span class="btn-icon">🚂</span>
+            </button>
+
+            <div class="game-rules">
+                <h3>🎲 Luật Chơi</h3>
+                <ul>
+                    <li>🎲 Tung xúc xắc để di chuyển (1-6 bước)</li>
+                    <li>💬 Hoàn thành nhiệm vụ tại mỗi ô</li>
+                    <li>💑 Gặp nhau tại <strong>Điểm Hẹn</strong> = Hoạt động cặp đôi!</li>
+                    <li>🎯 Roll đúng số để về đích</li>
+                    <li>🏆 Ai về đích trước thì thắng!</li>
+                </ul>
+            </div>
+
+            <!-- Audio Settings -->
+            <div class="audio-settings">
+                <h3>🔊 Cài Đặt Âm Thanh</h3>
+                <div class="audio-control">
+                    <label for="sfx-volume">🎵 Hiệu ứng âm thanh</label>
+                    <div class="slider-container">
+                        <input type="range" id="sfx-volume" min="0" max="100" value="70" class="volume-slider">
+                        <span id="sfx-value" class="volume-value">70%</span>
+                    </div>
+                </div>
+                <div class="audio-control">
+                    <label for="music-volume">🎶 Nhạc nền</label>
+                    <div class="slider-container">
+                        <input type="range" id="music-volume" min="0" max="100" value="50" class="volume-slider">
+                        <span id="music-value" class="volume-value">50%</span>
+                    </div>
+                </div>
+                <div class="audio-toggle">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="music-toggle" checked>
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-text">Bật nhạc nền</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- App Download Links -->
+            <div class="app-download-section">
+                <p class="download-title">📲 Tải App để chơi mọi lúc:</p>
+                <div class="download-buttons">
+                    <a href="https://apps.apple.com/app/love-journey-game" target="_blank" class="download-btn ios-btn"
+                        id="ios-download">
+                        <span class="btn-icon">🍎</span>
+                        <span class="btn-text">App Store</span>
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.lovejourney.game" target="_blank"
+                        class="download-btn android-btn" id="android-download">
+                        <span class="btn-icon">🤖</span>
+                        <span class="btn-text">Google Play</span>
+                    </a>
+                </div>
+                <p class="pwa-note">💡 Hoặc: <strong>Thêm vào Màn hình chính</strong> từ trình duyệt!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Player Status Bar -->
+        <div class="status-bar">
+            <div class="player-card p1-card">
+                <div class="player-avatar-wrapper">
+                    <span class="player-avatar">💙</span>
+                    <span class="player-piece p1-piece"></span>
+                </div>
+                <div class="player-info-text">
+                    <span class="player-name" id="p1-display-name">Anh</span>
+                    <span class="player-stats">
+                        <span id="p1-position">Ô 0/20</span>
+                        <span id="p1-penalty" class="penalty-badge">⚡ 0</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="turn-display">
+                <span class="turn-label">Lượt của</span>
+                <span id="current-player-name" class="current-player">Anh</span>
+            </div>
+
+            <div class="player-card p2-card">
+                <div class="player-avatar-wrapper">
+                    <span class="player-avatar">💗</span>
+                    <span class="player-piece p2-piece"></span>
+                </div>
+                <div class="player-info-text">
+                    <span class="player-name" id="p2-display-name">Em</span>
+                    <span class="player-stats">
+                        <span id="p2-position">Ô 0/20</span>
+                        <span id="p2-penalty" class="penalty-badge">⚡ 0</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <button id="back-to-menu-btn" class="btn-back" title="Quay về menu">
+                ⬅️ Menu
+            </button>
+        </div>
+
+        <!-- Game Board Canvas - EXPANDED -->
+        <div class="board-container">
+            <div class="board-scroll-wrapper">
+                <div class="board-inner">
+                    <div class="board-background">
+                        <!-- Corner decorations (far from lanes) -->
+                        <div class="decoration tree" style="top: 3%; left: 1%;">🌳</div>
+                        <div class="decoration tree" style="top: 3%; right: 1%;">🌳</div>
+                        <div class="decoration tree" style="bottom: 3%; left: 1%;">🌲</div>
+                        <div class="decoration tree" style="bottom: 3%; right: 1%;">🌲</div>
+
+                        <!-- Top edge decorations -->
+                        <div class="decoration" style="top: 2%; left: 20%;">⭐</div>
+                        <div class="decoration" style="top: 2%; left: 40%;">🌟</div>
+                        <div class="decoration" style="top: 2%; right: 40%;">✨</div>
+                        <div class="decoration" style="top: 2%; right: 20%;">🌙</div>
+
+                        <!-- Bottom edge decorations -->
+                        <div class="decoration" style="bottom: 2%; left: 25%;">🌷</div>
+                        <div class="decoration" style="bottom: 2%; left: 45%;">🌻</div>
+                        <div class="decoration" style="bottom: 2%; right: 45%;">🌺</div>
+                        <div class="decoration" style="bottom: 2%; right: 25%;">🌸</div>
+
+                        <!-- Left edge decorations -->
+                        <div class="decoration" style="top: 35%; left: 0.5%;">🦋</div>
+                        <div class="decoration" style="top: 65%; left: 0.5%;">🐦</div>
+
+                        <!-- Right edge decorations -->
+                        <div class="decoration" style="top: 35%; right: 0.5%;">🦢</div>
+                        <div class="decoration" style="top: 65%; right: 0.5%;">🦜</div>
+
+                        <!-- Corner accent icons -->
+                        <div class="decoration" style="top: 8%; left: 5%;">🎀</div>
+                        <div class="decoration" style="top: 8%; right: 5%;">🎈</div>
+                        <div class="decoration" style="bottom: 8%; left: 5%;">🍀</div>
+                        <div class="decoration" style="bottom: 8%; right: 5%;">🌼</div>
+
+                        <!-- Far corner decorations -->
+                        <div class="decoration heart-deco" style="top: 5%; left: 12%;">💕</div>
+                        <div class="decoration heart-deco" style="top: 5%; right: 12%;">💝</div>
+                        <div class="decoration" style="bottom: 5%; left: 12%;">🌈</div>
+                        <div class="decoration" style="bottom: 5%; right: 12%;">🎡</div>
+                    </div>
+
+                    <!-- SVG Board - EXPANDED LAYOUT -->
+                    <svg class="board-svg" viewBox="0 0 4000 1000" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="path1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.35" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.35" />
+                            </linearGradient>
+                            <linearGradient id="path2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:0.35" />
+                                <stop offset="100%" style="stop-color:#c44cff;stop-opacity:0.35" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <!-- Lane 1 Track (Blue) - EXPANDED PATH -->
+                        <path id="lane1-track" d="M 150,850 
+                                 Q 500,850 900,500 
+                                 Q 1300,150 1800,500 
+                                 Q 2300,850 2700,500 
+                                 Q 3100,150 3600,150" fill="none" stroke="url(#path1Gradient)" stroke-width="140"
+                            stroke-linecap="round" />
+
+                        <!-- Lane 2 Track (Pink) - EXPANDED PATH -->
+                        <path id="lane2-track" d="M 150,150 
+                                 Q 500,150 900,500 
+                                 Q 1300,850 1800,500 
+                                 Q 2300,150 2700,500 
+                                 Q 3100,850 3600,850" fill="none" stroke="url(#path2Gradient)" stroke-width="140"
+                            stroke-linecap="round" />
+
+                        <!-- Lane 1 Path Line (Blue) -->
+                        <path id="lane1-path" d="M 150,850 
+                                 Q 500,850 900,500 
+                                 Q 1300,150 1800,500 
+                                 Q 2300,850 2700,500 
+                                 Q 3100,150 3600,150" fill="none" stroke="#667eea" stroke-width="4"
+                            stroke-dasharray="12,6" opacity="0.9" />
+
+                        <!-- Lane 2 Path Line (Pink) -->
+                        <path id="lane2-path" d="M 150,150 
+                                 Q 500,150 900,500 
+                                 Q 1300,850 1800,500 
+                                 Q 2300,150 2700,500 
+                                 Q 3100,850 3600,850" fill="none" stroke="#ff6b9d" stroke-width="4"
+                            stroke-dasharray="12,6" opacity="0.9" />
+
+                        <!-- Intersection Highlights -->
+                        <circle cx="900" cy="500" r="80" fill="rgba(0,217,255,0.25)" filter="url(#glow)"
+                            class="intersection-glow" />
+                        <circle cx="1800" cy="500" r="80" fill="rgba(0,217,255,0.25)" filter="url(#glow)"
+                            class="intersection-glow" />
+                        <circle cx="2700" cy="500" r="80" fill="rgba(0,217,255,0.25)" filter="url(#glow)"
+                            class="intersection-glow" />
+
+                        <!-- Tiles Layer -->
+                        <g id="tiles-layer"></g>
+
+                        <!-- Players Layer -->
+                        <g id="players-layer"></g>
+                    </svg>
+
+                    <!-- Labels -->
+                    <div class="board-label start-label-p1">
+                        <span>🏠 START</span>
+                        <span class="label-player">💙</span>
+                    </div>
+                    <div class="board-label start-label-p2">
+                        <span>🏠 START</span>
+                        <span class="label-player">💗</span>
+                    </div>
+                    <div class="board-label finish-label-p1">
+                        <span>🏁 FINISH</span>
+                        <span class="label-player">💙</span>
+                    </div>
+                    <div class="board-label finish-label-p2">
+                        <span>🏁 FINISH</span>
+                        <span class="label-player">💗</span>
+                    </div>
+
+                    <!-- Intersection Labels - BELOW intersection points -->
+                    <div class="intersection-label" style="left: 22.5%; top: 60%;">💑 Hẹn 1</div>
+                    <div class="intersection-label" style="left: 45%; top: 60%;">💑 Hẹn 2</div>
+                    <div class="intersection-label" style="left: 67.5%; top: 60%;">💑 Hẹn 3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dice & Controls -->
+        <div class="controls-section">
+            <div class="dice-area">
+                <div class="dice-3d" id="dice">
+                    <div class="dice-face front"><span class="dot"></span></div>
+                    <div class="dice-face back"><span class="dot"></span><span class="dot"></span><span
+                            class="dot"></span><span class="dot"></span><span class="dot"></span><span
+                            class="dot"></span></div>
+                    <div class="dice-face right"><span class="dot"></span><span class="dot"></span><span
+                            class="dot"></span></div>
+                    <div class="dice-face left"><span class="dot"></span><span class="dot"></span><span
+                            class="dot"></span><span class="dot"></span></div>
+                    <div class="dice-face top"><span class="dot"></span><span class="dot"></span></div>
+                    <div class="dice-face bottom"><span class="dot"></span><span class="dot"></span><span
+                            class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                </div>
+            </div>
+            <button id="roll-dice-btn" class="btn-roll">
+                🎲 Tung Xúc Xắc
+            </button>
+            <div class="dice-result" id="dice-result"></div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-bar">
+            <span class="legend-item"><span class="legend-dot romance"></span>Lãng mạn</span>
+            <span class="legend-item"><span class="legend-dot deep"></span>Sâu sắc</span>
+            <span class="legend-item"><span class="legend-dot fun"></span>Vui nhộn</span>
+            <span class="legend-item"><span class="legend-dot intimate"></span>Thân mật</span>
+            <span class="legend-item"><span class="legend-dot dare"></span>Thử thách</span>
+            <span class="legend-item"><span class="legend-dot overlap"></span>Điểm hẹn</span>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="question-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+                <span class="modal-icon" id="modal-icon">💗</span>
+                <span class="modal-category" id="modal-category">Lãng Mạn</span>
+            </div>
+            <div class="modal-body">
+                <p class="question-text" id="question-text">Câu hỏi...</p>
+                <div class="timer-bar">
+                    <div class="timer-progress" id="timer-progress"></div>
+                </div>
+                <span class="timer-text" id="timer-text">60s</span>
+            </div>
+            <div class="modal-footer">
+                <button id="complete-task-btn" class="btn-complete">✅ Hoàn Thành</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="special-modal" class="modal">
+        <div class="modal-content special-content">
+            <div class="special-icon" id="special-icon">⭐</div>
+            <h2 class="special-title" id="special-title">Ô Đặc Biệt!</h2>
+            <p class="special-desc" id="special-desc">...</p>
+            <button id="special-ok-btn" class="btn-primary">OK</button>
+        </div>
+    </div>
+
+    <div id="overlap-modal" class="modal">
+        <div class="modal-content overlap-content">
+            <div class="overlap-icon">💑</div>
+            <h2 class="overlap-title" id="overlap-title">Điểm Hẹn Tình Yêu!</h2>
+            <p class="overlap-desc" id="overlap-desc">Đang chờ...</p>
+            <button id="overlap-ok-btn" class="btn-primary">Đã hiểu!</button>
+        </div>
+    </div>
+
+    <!-- Wait or Continue Modal - First player at meeting point -->
+    <div id="wait-continue-modal" class="modal">
+        <div class="modal-content choice-content">
+            <div class="choice-icon">💑</div>
+            <h2 class="choice-title" id="wait-continue-title">Điểm Hẹn!</h2>
+            <p class="choice-desc" id="wait-continue-desc">Bạn đã đến điểm hẹn. Chờ đợi người ấy hay tiếp tục?</p>
+            <div class="choice-buttons">
+                <button id="wait-btn" class="btn-accept">💕 Chờ Đợi (3 lượt)</button>
+                <button id="continue-btn" class="btn-refuse">⚡ Tiếp Tục</button>
+            </div>
+            <p style="font-size: 0.8rem; color: #ff6b9d; margin-top: 0.5rem;">⚠️ Tiếp tục = +1 ⚡ (≥2 sẽ bị phạt!)</p>
+        </div>
+    </div>
+
+    <!-- Lightning Punishment Modal -->
+    <div id="lightning-modal" class="modal">
+        <div class="modal-content punishment-content">
+            <div class="punishment-icon">⚡⚡</div>
+            <h2 class="punishment-title" id="lightning-title">Sét Đánh!</h2>
+            <p class="punishment-desc" id="lightning-desc">Bạn đã tích đủ 2 sét! Đối phương được quyền phạt bạn!</p>
+            <p style="font-size: 0.9rem; color: #f7b731;">Chọn 1 trong 2:</p>
+            <div class="choice-buttons">
+                <button id="lightning-action-btn" class="btn-refuse">🔥 Làm thử thách</button>
+                <button id="lightning-question-btn" class="btn-accept">💬 Trả lời câu hỏi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="couple-modal" class="modal">
+        <div class="modal-content couple-content">
+            <div class="couple-icon">💑✨</div>
+            <h2 class="couple-title" id="couple-title">Hoạt Động Cặp Đôi!</h2>
+            <p class="couple-desc" id="couple-desc">...</p>
+            <p class="couple-duration" id="couple-duration">⏱️ 60 giây</p>
+            <button id="couple-complete-btn" class="btn-complete">💕 Hoàn Thành!</button>
+        </div>
+    </div>
+
+    <div id="dual-meeting-modal" class="modal">
+        <div class="modal-content couple-content">
+            <div class="couple-icon">💑🔥💑</div>
+            <h2 class="couple-title" id="dual-meeting-title">Cả Hai Đều Ở Điểm Hẹn!</h2>
+            <p class="couple-desc" id="dual-meeting-desc">Mỗi người phải hoàn thành 2 hoạt động!</p>
+            <div id="dual-meeting-activities">
+                <p class="dual-activity" id="dual-activity-1">🔸 Hoạt động 1: ...</p>
+                <p class="dual-activity" id="dual-activity-2">🔸 Hoạt động 2: ...</p>
+            </div>
+            <button id="dual-meeting-complete-btn" class="btn-complete">💕 Cả Hai Hoàn Thành!</button>
+        </div>
+    </div>
+
+    <div id="choice-modal" class="modal">
+        <div class="modal-content choice-content">
+            <div class="choice-icon">🤔</div>
+            <h2 class="choice-title" id="choice-title">Lựa Chọn!</h2>
+            <p class="choice-desc" id="choice-desc">...</p>
+            <div class="choice-buttons">
+                <button id="choice-accept-btn" class="btn-accept">💕 Đồng Ý</button>
+                <button id="choice-refuse-btn" class="btn-refuse">❌ Từ Chối</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="punishment-modal" class="modal">
+        <div class="modal-content punishment-content">
+            <div class="punishment-icon">⚠️</div>
+            <h2 class="punishment-title" id="punishment-title">Hình Phạt!</h2>
+            <p class="punishment-desc" id="punishment-desc">...</p>
+            <p class="punishment-count" id="punishment-count">1/3</p>
+            <button id="punishment-ok-btn" class="btn-primary">Đã Làm!</button>
+        </div>
+    </div>
+
+    <div id="revenge-modal" class="modal">
+        <div class="modal-content revenge-content">
+            <div class="revenge-icon">🔥</div>
+            <h2 class="revenge-title" id="revenge-title">PHẢN ĐÒN!</h2>
+            <p class="revenge-desc" id="revenge-desc">...</p>
+            <button id="revenge-ok-btn" class="btn-revenge">😈 Thực Hiện!</button>
+        </div>
+    </div>
+
+    <div id="win-modal" class="modal">
+        <div class="modal-content win-content">
+            <div class="confetti-container" id="confetti"></div>
+            <div class="trophy">🏆</div>
+            <h1 class="win-title">Chúc Mừng!</h1>
+            <p class="winner-name" id="winner-name">Player</p>
+            <p class="win-message">Đã hoàn thành hành trình! 💕</p>
+            <p class="win-subtitle">Nhưng trong tình yêu, cả hai đều chiến thắng! 💗</p>
+            <button id="play-again-btn" class="btn-primary">🔄 Chơi Lại</button>
+        </div>
+    </div>
+
+    <script src="js/questions.js"></script>
+    <script src="js/dice.js"></script>
+    <script src="js/board.js?v=FIX_OVERLAP_3"></script>
+    <script src="js/game.js?v=FIX_OVERLAP_3"></script>
+    <script src="js/pwa.js"></script>
+</body>
+
+</html>
