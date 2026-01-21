@@ -402,9 +402,15 @@ class BoardRenderer {
         const angle = Math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / Math.PI;
 
         // Calculate segment length based on distance to next tile
-        // Use FIXED tile size for consistent appearance across all tiles
-        const STANDARD_TILE_SIZE = 65;
-        const segmentLength = STANDARD_TILE_SIZE;
+        const rawLength = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
+
+        // Use FIXED tile size for consistent appearance, BUT cap it to prevent overlap
+        const STANDARD_TILE_SIZE = 56; // Reduced from 65 to prevent sticking
+
+        // Ensure tile is never larger than the space available minus a gap
+        const maxAllowed = Math.max(rawLength - 4, 30);
+        const segmentLength = Math.min(STANDARD_TILE_SIZE, maxAllowed);
+
         const segmentHeight = 38; // Compact height to prevent overlap
 
         // Create segment rectangle
