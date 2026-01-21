@@ -142,11 +142,15 @@ class BoardRenderer {
      */
     createLaneSegments(path, tileTypes, colors, laneNum) {
         const length = path.getTotalLength();
-        const segmentLength = length / (this.tilesPerLane - 1);
+
+        // FIXED tile width for consistent sizing across all tiles
+        const STANDARD_TILE_WIDTH = 95;
+        const TILE_HEIGHT = 30;
 
         for (let i = 0; i < this.tilesPerLane - 1; i++) {
-            const percentage1 = i / (this.tilesPerLane - 1);
-            const percentage2 = (i + 1) / (this.tilesPerLane - 1);
+            // Use tilePositions (with manual offsets) for consistent positioning
+            const percentage1 = this.tilePositions[i];
+            const percentage2 = this.tilePositions[i + 1];
 
             const point1 = path.getPointAtLength(length * percentage1);
             const point2 = path.getPointAtLength(length * percentage2);
@@ -155,7 +159,9 @@ class BoardRenderer {
             const centerX = (point1.x + point2.x) / 2;
             const centerY = (point1.y + point2.y) / 2;
             const angle = Math.atan2(point2.y - point1.y, point2.x - point1.x) * 180 / Math.PI;
-            const segLen = Math.hypot(point2.x - point1.x, point2.y - point1.y);
+
+            // Use FIXED width for consistent tile sizing
+            const segLen = STANDARD_TILE_WIDTH;
 
             // Create segment rectangle
             const segmentType = tileTypes[i];
@@ -172,9 +178,9 @@ class BoardRenderer {
 
             const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             rect.setAttribute('x', -segLen / 2);
-            rect.setAttribute('y', -15);
-            rect.setAttribute('width', segLen + 2); // Slight overlap to avoid gaps
-            rect.setAttribute('height', 30);
+            rect.setAttribute('y', -TILE_HEIGHT / 2);
+            rect.setAttribute('width', segLen);
+            rect.setAttribute('height', TILE_HEIGHT);
             rect.setAttribute('rx', '4');
             rect.setAttribute('ry', '4');
             rect.setAttribute('fill', color);
@@ -396,11 +402,9 @@ class BoardRenderer {
         const angle = Math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / Math.PI;
 
         // Calculate segment length based on distance to next tile
-        const rawLength = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
-
-        // Make segments smaller to prevent overlap
-        const lengthFactor = nextIsIntersection ? 0.45 : 0.55;
-        const segmentLength = Math.max(rawLength * lengthFactor, 40);
+        // Use FIXED tile size for consistent appearance across all tiles
+        const STANDARD_TILE_SIZE = 65;
+        const segmentLength = STANDARD_TILE_SIZE;
         const segmentHeight = 38; // Compact height to prevent overlap
 
         // Create segment rectangle
