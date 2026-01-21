@@ -80,8 +80,9 @@ class BoardRenderer {
             // These areas have shorter physical distances, so we spread tiles apart
 
             // Near intersection 7 (tiles 5, 6)
-            if (i === 5) pos -= 0.02;  // Push tile 5 left
-            if (i === 6) pos -= 0.01;  // Push tile 6 slightly left
+            if (i === 5) pos -= 0.045;  // Push tile 5 far left
+            if (i === 6) pos -= 0.025;  // Push tile 6 left
+            if (i === 8) pos += 0.02;   // Push tile 8 right
 
             // Near intersection 15 (tiles 13, 14, 16, 17)
             if (i === 13) pos -= 0.01; // Push tile 13 left
@@ -90,10 +91,10 @@ class BoardRenderer {
             if (i === 17) pos += 0.01;  // Push tile 17 right
 
             // Near intersection 22 (tiles 20, 21, 23, 24)
-            if (i === 20) pos -= 0.02; // Push tile 20 left
-            if (i === 21) pos -= 0.01; // Push tile 21 left  
-            if (i === 23) pos += 0.01; // Push tile 23 right
-            if (i === 24) pos += 0.02; // Push tile 24 right
+            if (i === 20) pos -= 0.045; // Push tile 20 far left
+            if (i === 21) pos -= 0.025; // Push tile 21 left  
+            if (i === 23) pos += 0.025; // Push tile 23 right
+            if (i === 24) pos += 0.045; // Push tile 24 far right
 
             this.tilePositions.push(pos);
         }
