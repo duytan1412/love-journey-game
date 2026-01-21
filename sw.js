@@ -3,7 +3,7 @@
  * Enables offline play and app-like experience
  */
 
-const CACHE_NAME = 'love-journey-v1';
+const CACHE_NAME = 'love-journey-v2';
 const urlsToCache = [
     '/',
     '/index.html',
